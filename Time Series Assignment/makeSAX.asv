@@ -1,0 +1,36 @@
+function sax = makeSAX(c, l, data)
+
+% This function creates a SAX by first converting the data to a PAA with segment size c to
+% reduce the amount of data. Then classifies each value to one of l letters
+% based on what range it falls in.
+
+    % Converts the data into a PAA
+    paa = makePAA(c, data);
+
+    % Initializes the SAX
+    dimension = size(paa);
+    rows = dimension(1);
+    cols = dimension(2);
+    sax = zeros(rows, cols);
+
+    for row = 1:rows
+        % Finds the normal distribution of the data
+        a = data(row);
+        currMean = getMean(data, row);
+        currStd = getStd(data, row, currMean);
+
+        % Classifies each point to a letter
+        for col = 1:cols
+            val = paa(row, col);
+            sax(row, col) = 'a';
+            for segment = 1:(l-1)
+                if (val > currMean + norminv(segment/l, currMean, currStd))
+                    sax(row, col) = 'a'+segment;
+                end
+            end
+        end
+    end
+    sax = char(sax);
+
+end
+

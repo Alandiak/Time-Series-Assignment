@@ -1,0 +1,8 @@
+function mean = getMean(row)
+    % gets the mean value of a row
+    mean = 0;
+    for elem = row
+       mean = mean + elem; 
+    end
+    mean = mean/length(row);
+end
